@@ -44,5 +44,5 @@ runs:
       shell: bash
 
     - name: 'Check configuration management'
-      run: ssh server 'cd ${{ inputs.project_dir }} && ./vendor/bin/drush --ansi config:export --diff'
+      run: ssh server 'cd ${{ inputs.project_dir }} && ./vendor/bin/drush --ansi config:export --diff --no'
       shell: bash
