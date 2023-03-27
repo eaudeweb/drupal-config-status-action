@@ -40,9 +40,9 @@ runs:
       shell: bash
 
     - name: 'Check configuration management'
-      run: ssh server 'export TERM=xterm-color && cd ${{ inputs.project_dir }} && ./vendor/bin/drush config:status'
+      run: ssh server 'cd ${{ inputs.project_dir }} && ./vendor/bin/drush --ansi config:status'
       shell: bash
 
     - name: 'Check configuration management'
-      run: ssh server 'export TERM=xterm-color && cd ${{ inputs.project_dir }} && ./vendor/bin/drush config:export --diff'
+      run: ssh server 'cd ${{ inputs.project_dir }} && ./vendor/bin/drush --ansi config:export --diff'
       shell: bash
