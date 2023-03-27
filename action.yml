@@ -1,0 +1,44 @@
+name: 'Check Drupal configuraion status'
+description: 'Connect to server and provide information about the Drupal instance'
+inputs:
+  ssh_user:
+    description: 'SSH user account'
+    required: true
+  ssh_host:
+    description: 'SSH host server'
+    required: true
+  ssh_key:
+    description: 'SSH private key'
+    required: true
+  project_dir:
+    description: 'Absolute path to the Drupal home directory (where web folder is located)'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: 'Configure SSH'
+      run: |
+        mkdir -p ~/.ssh/
+        echo "$SSH_KEY" > ~/.ssh/server.key
+        chmod 600 ~/.ssh/server.key
+        cat > ~/.ssh/config <<END
+        Host server
+          HostName $SSH_HOST
+          User $SSH_USER
+          IdentityFile ~/.ssh/server.key
+          StrictHostKeyChecking no
+        END
+      env:
+        SSH_USER: ${{ inputs.ssh_user }}
+        SSH_HOST: ${{ inputs.ssh_host }}
+        SSH_KEY: ${{ inputs.ssh_key }}
+      shell: bash
+
+    - name: 'Check drush status'
+      run: ssh server 'cd ${{ inputs.project_dir }} && ./vendor/bin/drush core-status'
+      shell: bash
+
+    - name: 'Check configuration management'
+      run: ssh server 'cd ${{ inputs.project_dir }} && ./vendor/bin/drush config:status'
+      shell: bash
