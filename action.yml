@@ -42,3 +42,7 @@ runs:
     - name: 'Check configuration management'
       run: ssh server 'cd ${{ inputs.project_dir }} && ./vendor/bin/drush config:status'
       shell: bash
+
+    - name: 'Check configuration management'
+      run: ssh server 'cd ${{ inputs.project_dir }} && ./vendor/bin/drush config:export --diff'
+      shell: bash
